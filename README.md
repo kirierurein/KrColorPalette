@@ -25,10 +25,11 @@ From Edit Color :
 `Tools > Kirierurein > ColorPalette > CreatePathDefine`
 
 GenerateFilePathDefineアセットが生成されます
-|filedName|概要|
-|-|-|
-|colorAssetPath|colorsアセットの生成パス<br>Editorフォルダ直下にファイルを生成しないとColorPresetLibraryが認識しないので注意|
-|defineScriptPath|Palletクラスのファイルの生成パス|
+
+| filedName | 概要 |
+| --- | --- |
+| colorAssetPath | colorsアセットの生成パス<br>Editorフォルダ直下にファイルを生成しないとColorPresetLibraryが認識しないので注意 |
+| defineScriptPath | Palletクラスのファイルの生成パス |
 
 ### カラー情報を追加,削除
 `Tools > Kirierurein > ColorPalette > ColorPaletteEditor`
