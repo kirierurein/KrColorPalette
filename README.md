@@ -1,6 +1,9 @@
 # KrColorPalette
 Color情報をスクリプトに定義&ColorPresetLibraryの作成を行うエディタ拡張
 
+## UnityVersion
+2018.4.7f1
+
 ## Installation
 [unitypackage](KrColorPalettePackage.unitypackage)
 
