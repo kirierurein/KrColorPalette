@@ -6,12 +6,14 @@ Color情報をスクリプトに定義&ColorPresetLibraryの作成を行うエ�
 
 ## Usage
 
-From Script
+From Script :
+
 ```
 image.color = KrColorPalette.Palette.Red;
 ```
 
-From Edit Color
+From Edit Color :
+
 カラー情報を追加を行うとドロップダウンにcolorsアセットのファイル名が追加されます<br>
 変更するとSwatchesがカラー情報を追加を行った内容になります
 表示設定をListにしておくと色情報の隣に詳細が表示されます<br>
