@@ -21,6 +21,7 @@ From Edit Color
 ## Tools
 ### スクリプト&colorsアセットを生成するパスを定義
 `Tools > Kirierurein > ColorPalette > CreatePathDefine`
+
 GenerateFilePathDefineアセットが生成されます
 |filedName|概要|
 |-|-|
@@ -29,6 +30,7 @@ GenerateFilePathDefineアセットが生成されます
 
 ### カラー情報を追加,削除
 `Tools > Kirierurein > ColorPalette > ColorPaletteEditor`
+
 ![EditorWindow](Snapshots/EditorWindow.png)
 
 ## License
