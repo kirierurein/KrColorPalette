@@ -1,0 +1,2 @@
+# KrColorPalette
+Unityで使用する色情報をクラスにまとめる
