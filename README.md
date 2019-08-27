@@ -9,13 +9,21 @@ Color情報をスクリプトに定義&ColorPresetLibraryの作成を行うエ�
 
 ## Usage
 
-From Script :
+### From Script :
 
+#### スクリプトで指定する場合
 ```
 image.color = KrColorPalette.Palette.Red;
 ```
 
-From Edit Color :
+#### スクリプトをアタッチする場合
+
+TextやImageなどのGraphicを継承しているオブジェクトの場合は <br>`GraphicColorInitializer` をアタッチしてください<br>
+`GraphicColorInitializer` はAwakeのタイミングで指定されたカラーをTargetに設定します
+
+<img src="Snapshots/GraphicColorInitializer.png" width="256">
+
+### From Edit Color :
 
 カラー情報を追加を行うとドロップダウンにcolorsアセットのファイル名が追加されます<br>
 変更するとSwatchesがカラー情報を追加を行った内容になります
