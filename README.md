@@ -18,10 +18,23 @@ image.color = KrColorPalette.Palette.Red;
 
 #### スクリプトをアタッチする場合
 
-TextやImageなどのGraphicを継承しているオブジェクトの場合は <br>`GraphicColorInitializer` をアタッチしてください<br>
+TextやImageなどのGraphicを継承しているオブジェクトの場合は <br>
+`GraphicColorInitializer` をアタッチしてください<br>
 `GraphicColorInitializer` はAwakeのタイミングで指定されたカラーをTargetに設定します
 
 <img src="Snapshots/GraphicColorInitializer.png" width="256">
+
+ButtonなどのSelectableを継承しているオブジェクトの場合は <br>
+`SelectableColorInitializer` をアタッチしてください<br>
+`SelectableColorInitializer` はAwakeのタイミングで指定されたカラーをTargetに設定します
+
+<img src="Snapshots/SelectableColorInitializer.png" width="256">
+
+SpriteRendererの場合は <br>
+`SpriteRendererの場合はColorInitializer` をアタッチしてください<br>
+`SpriteRendererの場合はColorInitializer` はAwakeのタイミングで指定されたカラーをTargetに設定します
+
+<img src="Snapshots/SpriteRendererColorInitializer.png" width="256">
 
 ### From Edit Color :
 
