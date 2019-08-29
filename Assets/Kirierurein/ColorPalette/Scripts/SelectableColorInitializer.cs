@@ -28,13 +28,12 @@ namespace KrColorPalette
         {
             if(target != null)
             {
-                target.colors = new ColorBlock
-                {
-                    normalColor = color,
-                    highlightedColor = highlightedColor,
-                    pressedColor = pressedColor,
-                    disabledColor = disabledColor,
-                };
+                ColorBlock colors = target.colors;
+                colors.normalColor = color;
+                colors.highlightedColor = highlightedColor;
+                colors.pressedColor = pressedColor;
+                colors.disabledColor = disabledColor;
+                target.colors = colors;
             }
         }
     }
