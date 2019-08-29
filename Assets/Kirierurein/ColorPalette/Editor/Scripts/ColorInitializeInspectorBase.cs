@@ -7,10 +7,11 @@ namespace KrColorPalette
 {
     public abstract class ColorInitializeInspectorBase : Editor
     {
-        private PropertyInfo[]      properties          = null; // Palette色のクラスのプロパティ配列
+        protected PropertyInfo[]        properties          = null; // Palette色のクラスのプロパティ配列
+        protected string[]              propertyNames       = null; // プルダウンに表示するプロパティ名配列
+        protected SerializedProperty    color               = null;
+
         private SerializedProperty  selectPropertyName  = null;
-        private SerializedProperty  color               = null;
-        private string[]            propertyNames       = null; // プルダウンに表示するプロパティ名配列
         private int                 selectIndex         = -1;   // 選択しているプロパティ配列のindex(-1の場合は選択対象のプロパティが存在しない)
 
         protected virtual void OnEnable()
@@ -33,12 +34,6 @@ namespace KrColorPalette
             {
                 // すでに設定していたプロパティがなくなった場合はエラーログを表示
                 Debug.LogError($"[{target.GetType().Name}]指定されている{selectPropertyName.stringValue}は定義されていません : {target.name}");
-            }
-
-            if(!EditorApplication.isPlaying)
-            {
-                // エディタがプレイ中でなければカラーを再設定しない
-                UpdateColor(color.colorValue);
             }
         }
 

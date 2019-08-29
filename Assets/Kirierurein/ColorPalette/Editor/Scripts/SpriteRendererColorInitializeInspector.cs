@@ -13,6 +13,11 @@ namespace KrColorPalette
         {
             targetSprite = serializedObject.FindProperty("target");
             base.OnEnable();
+            if(!EditorApplication.isPlaying)
+            {
+                // エディタがプレイ中でなければカラーを再設定しない
+                UpdateColor(color.colorValue);
+            }
         }
 
         public override void OnInspectorGUI()
