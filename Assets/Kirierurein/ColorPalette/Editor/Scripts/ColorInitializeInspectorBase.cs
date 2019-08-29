@@ -51,14 +51,8 @@ namespace KrColorPalette
             {
                 selectPropertyName.stringValue = propertyNames[selectIndex];
                 color.colorValue = (Color)properties[selectIndex].GetValue(null);
-                UpdateColor(color.colorValue);
             }
         }
-
-        /// <summary>
-        /// 色の更新
-        /// </summary>
-        protected virtual void UpdateColor(Color color){}
     }
 }
 

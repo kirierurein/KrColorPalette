@@ -24,15 +24,20 @@ namespace KrColorPalette
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(targetGraphic);
             base.OnInspectorGUI();
+            if(EditorGUI.EndChangeCheck())
+            {
+                UpdateColor(color.colorValue);
+            }
             serializedObject.ApplyModifiedProperties();
         }
 
         /// <summary>
         /// 色の更新
         /// </summary>
-        protected override void UpdateColor(Color color)
+        private void UpdateColor(Color color)
         {
             if(targetGraphic.objectReferenceValue != null)
             {

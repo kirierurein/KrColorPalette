@@ -9,13 +9,13 @@ namespace KrColorPalette
     [CanEditMultipleObjects]
     public class SelectableColorInitializeInspector : ColorInitializeInspectorBase
     {
-        private class SelectableColor
+        private class ColorParam
         {
             public SerializedProperty  color               = null;
             public SerializedProperty  selectPropertyName  = null;
             public int                 selectIndex         = -1;   // 選択しているプロパティ配列のindex(-1の場合は選択対象のプロパティが存在しない)
 
-            public SelectableColor(SerializedProperty serializedProperty, SerializedProperty selectPropertyName, PropertyInfo[] properties)
+            public ColorParam(SerializedProperty serializedProperty, SerializedProperty selectPropertyName, PropertyInfo[] properties)
             {
                 color = serializedProperty;
                 this.selectPropertyName = selectPropertyName;
@@ -30,9 +30,9 @@ namespace KrColorPalette
         }
 
         private SerializedProperty  targetSelectable    = null;
-        private SelectableColor     highlighted         = null;
-        private SelectableColor     pressed             = null;
-        private SelectableColor     disabled            = null;
+        private ColorParam          highlightedParam    = null;
+        private ColorParam          pressedParam        = null;
+        private ColorParam          disabledParam       = null;
 
         protected override void OnEnable()
         {
@@ -41,35 +41,35 @@ namespace KrColorPalette
 
             var highlightedColor = serializedObject.FindProperty("highlightedColor");
             var highlightedColorName = serializedObject.FindProperty("highlightedColorName");
-            highlighted = new SelectableColor(highlightedColor, highlightedColorName, properties);
-            if(highlighted.selectIndex <= -1 && !string.IsNullOrEmpty(highlighted.selectPropertyName.stringValue))
+            highlightedParam = new ColorParam(highlightedColor, highlightedColorName, properties);
+            if(highlightedParam.selectIndex <= -1 && !string.IsNullOrEmpty(highlightedParam.selectPropertyName.stringValue))
             {
                  // すでに設定していたプロパティがなくなった場合はエラーログを表示
-                Debug.LogError($"[{target.GetType().Name}]HighlightedColorに指定されている{highlighted.selectPropertyName.stringValue}は定義されていません : {target.name}");
+                Debug.LogError($"[{target.GetType().Name}]HighlightedColorに指定されている{highlightedParam.selectPropertyName.stringValue}は定義されていません : {target.name}");
             }
 
             var pressedColor = serializedObject.FindProperty("pressedColor");
             var pressedColorrName = serializedObject.FindProperty("pressedColorName");
-            pressed = new SelectableColor(pressedColor, pressedColorrName, properties);
-            if(pressed.selectIndex <= -1 && !string.IsNullOrEmpty(pressed.selectPropertyName.stringValue))
+            pressedParam = new ColorParam(pressedColor, pressedColorrName, properties);
+            if(pressedParam.selectIndex <= -1 && !string.IsNullOrEmpty(pressedParam.selectPropertyName.stringValue))
             {
                 // すでに設定していたプロパティがなくなった場合はエラーログを表示
-                Debug.LogError($"[{target.GetType().Name}]PressedColorに指定されている{pressed.selectPropertyName.stringValue}は定義されていません : {target.name}");
+                Debug.LogError($"[{target.GetType().Name}]PressedColorに指定されている{pressedParam.selectPropertyName.stringValue}は定義されていません : {target.name}");
             }
 
             var disabledColor = serializedObject.FindProperty("disabledColor");
             var disabledColorName = serializedObject.FindProperty("disabledColorName");
-            disabled = new SelectableColor(disabledColor, disabledColorName, properties);
-            if(disabled.selectIndex <= -1 && !string.IsNullOrEmpty(disabled.selectPropertyName.stringValue))
+            disabledParam = new ColorParam(disabledColor, disabledColorName, properties);
+            if(disabledParam.selectIndex <= -1 && !string.IsNullOrEmpty(disabledParam.selectPropertyName.stringValue))
             {
                 // すでに設定していたプロパティがなくなった場合はエラーログを表示
-                Debug.LogError($"[{target.GetType().Name}]DisabledColorに指定されている{disabled.selectPropertyName.stringValue}は定義されていません : {target.name}");
+                Debug.LogError($"[{target.GetType().Name}]DisabledColorに指定されている{disabledParam.selectPropertyName.stringValue}は定義されていません : {target.name}");
             }
 
             if(!EditorApplication.isPlaying)
             {
                 // エディタがプレイ中でなければカラーを再設定しない
-                UpdateColors(color.colorValue, highlighted.color.colorValue, pressed.color.colorValue, disabled.color.colorValue);
+                UpdateColors(color.colorValue, highlightedParam.color.colorValue, pressedParam.color.colorValue, disabledParam.color.colorValue);
             }
         }
 
@@ -80,69 +80,61 @@ namespace KrColorPalette
             EditorGUILayout.PropertyField(targetSelectable);
             base.OnInspectorGUI();
 
-            highlighted.selectIndex = EditorGUILayout.Popup("HighlightedColor", highlighted.selectIndex, propertyNames);
+            highlightedParam.selectIndex = EditorGUILayout.Popup("HighlightedColor", highlightedParam.selectIndex, propertyNames);
 
-            if(highlighted.selectIndex >= 0)
+            if(highlightedParam.selectIndex >= 0)
             {
-                if(propertyNames[highlighted.selectIndex] != highlighted.selectPropertyName.stringValue)
+                if(propertyNames[highlightedParam.selectIndex] != highlightedParam.selectPropertyName.stringValue)
                 {
-                    highlighted.selectPropertyName.stringValue = propertyNames[highlighted.selectIndex];
-                    highlighted.color.colorValue = (Color)properties[highlighted.selectIndex].GetValue(null);
+                    highlightedParam.selectPropertyName.stringValue = propertyNames[highlightedParam.selectIndex];
+                    highlightedParam.color.colorValue = (Color)properties[highlightedParam.selectIndex].GetValue(null);
                 }
             }
 
-            pressed.selectIndex = EditorGUILayout.Popup("PressedColor", pressed.selectIndex, propertyNames);
+            pressedParam.selectIndex = EditorGUILayout.Popup("PressedColor", pressedParam.selectIndex, propertyNames);
 
-            if(pressed.selectIndex >= 0)
+            if(pressedParam.selectIndex >= 0)
             {
-                if(propertyNames[pressed.selectIndex] != pressed.selectPropertyName.stringValue)
+                if(propertyNames[pressedParam.selectIndex] != pressedParam.selectPropertyName.stringValue)
                 {
-                    pressed.selectPropertyName.stringValue = propertyNames[pressed.selectIndex];
-                    pressed.color.colorValue = (Color)properties[pressed.selectIndex].GetValue(null);
+                    pressedParam.selectPropertyName.stringValue = propertyNames[pressedParam.selectIndex];
+                    pressedParam.color.colorValue = (Color)properties[pressedParam.selectIndex].GetValue(null);
                 }
             }
 
-            disabled.selectIndex = EditorGUILayout.Popup("DisabledColor", disabled.selectIndex, propertyNames);
+            disabledParam.selectIndex = EditorGUILayout.Popup("DisabledColor", disabledParam.selectIndex, propertyNames);
 
-            if(disabled.selectIndex >= 0)
+            if(disabledParam.selectIndex >= 0)
             {
-                if(propertyNames[disabled.selectIndex] != disabled.selectPropertyName.stringValue)
+                if(propertyNames[disabledParam.selectIndex] != disabledParam.selectPropertyName.stringValue)
                 {
-                    disabled.selectPropertyName.stringValue = propertyNames[disabled.selectIndex];
-                    disabled.color.colorValue = (Color)properties[disabled.selectIndex].GetValue(null);
+                    disabledParam.selectPropertyName.stringValue = propertyNames[disabledParam.selectIndex];
+                    disabledParam.color.colorValue = (Color)properties[disabledParam.selectIndex].GetValue(null);
                 }
             }
 
             if(EditorGUI.EndChangeCheck())
             {
-                UpdateColors(color.colorValue, highlighted.color.colorValue, pressed.color.colorValue, disabled.color.colorValue);
+                UpdateColors(color.colorValue, highlightedParam.color.colorValue, pressedParam.color.colorValue, disabledParam.color.colorValue);
             }
 
             serializedObject.ApplyModifiedProperties();
         }
 
         /// <summary>
-        /// 通常色の更新
-        /// </summary>
-        protected override void UpdateColor(Color color)
-        {
-            UpdateColors(color, highlighted.color.colorValue, pressed.color.colorValue, disabled.color.colorValue);
-        }
-
-        /// <summary>
-        /// 
+        /// 色の更新
         /// </summary>
         private void UpdateColors(Color normalColor, Color highlightedColor, Color pressedColor, Color disabledColor)
         {
             if(targetSelectable.objectReferenceValue != null)
             {
-                Selectable graphic = (Selectable)targetSelectable.objectReferenceValue;
-                ColorBlock colors = graphic.colors;
+                Selectable selectable = (Selectable)targetSelectable.objectReferenceValue;
+                ColorBlock colors = selectable.colors;
                 colors.normalColor = normalColor;
                 colors.highlightedColor = highlightedColor;
                 colors.pressedColor = pressedColor;
                 colors.disabledColor = disabledColor;
-                graphic.colors = colors;
+                selectable.colors = colors;
             }
         }
     }
