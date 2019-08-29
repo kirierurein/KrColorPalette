@@ -12,8 +12,8 @@ namespace KrColorPalette
 
         protected override void OnEnable()
         {
-            targetGraphic = serializedObject.FindProperty("target");
             base.OnEnable();
+            targetGraphic = serializedObject.FindProperty("target");
             if(!EditorApplication.isPlaying)
             {
                 // エディタがプレイ中でなければカラーを再設定しない
