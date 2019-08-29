@@ -27,6 +27,29 @@ namespace KrColorPalette
                     }
                 }
             }
+
+            /// <summary>
+            /// 指定していたプロパティが削除されたかどうか
+            /// </summary>
+            /// <returns>削除されていた場合True</returns>
+            public bool IsDeletedProperty()
+            {
+                return selectIndex <= -1 && !string.IsNullOrEmpty(selectPropertyName.stringValue);
+            }
+
+            public void DrawPopup(string labelName, PropertyInfo[] properties,  string[] propertyNames)
+            {
+                selectIndex = EditorGUILayout.Popup(labelName, selectIndex, propertyNames);
+
+                if(selectIndex >= 0)
+                {
+                    if(propertyNames[selectIndex] != selectPropertyName.stringValue)
+                    {
+                        selectPropertyName.stringValue = propertyNames[selectIndex];
+                        color.colorValue = (Color)properties[selectIndex].GetValue(null);
+                    }
+                }
+            }
         }
 
         private SerializedProperty  targetSelectable    = null;
@@ -42,7 +65,7 @@ namespace KrColorPalette
             var highlightedColor = serializedObject.FindProperty("highlightedColor");
             var highlightedColorName = serializedObject.FindProperty("highlightedColorName");
             highlightedParam = new ColorParam(highlightedColor, highlightedColorName, properties);
-            if(highlightedParam.selectIndex <= -1 && !string.IsNullOrEmpty(highlightedParam.selectPropertyName.stringValue))
+            if(highlightedParam.IsDeletedProperty())
             {
                  // すでに設定していたプロパティがなくなった場合はエラーログを表示
                 Debug.LogError($"[{target.GetType().Name}]HighlightedColorに指定されている{highlightedParam.selectPropertyName.stringValue}は定義されていません : {target.name}");
@@ -51,7 +74,7 @@ namespace KrColorPalette
             var pressedColor = serializedObject.FindProperty("pressedColor");
             var pressedColorrName = serializedObject.FindProperty("pressedColorName");
             pressedParam = new ColorParam(pressedColor, pressedColorrName, properties);
-            if(pressedParam.selectIndex <= -1 && !string.IsNullOrEmpty(pressedParam.selectPropertyName.stringValue))
+            if(pressedParam.IsDeletedProperty())
             {
                 // すでに設定していたプロパティがなくなった場合はエラーログを表示
                 Debug.LogError($"[{target.GetType().Name}]PressedColorに指定されている{pressedParam.selectPropertyName.stringValue}は定義されていません : {target.name}");
@@ -60,7 +83,7 @@ namespace KrColorPalette
             var disabledColor = serializedObject.FindProperty("disabledColor");
             var disabledColorName = serializedObject.FindProperty("disabledColorName");
             disabledParam = new ColorParam(disabledColor, disabledColorName, properties);
-            if(disabledParam.selectIndex <= -1 && !string.IsNullOrEmpty(disabledParam.selectPropertyName.stringValue))
+            if(disabledParam.IsDeletedProperty())
             {
                 // すでに設定していたプロパティがなくなった場合はエラーログを表示
                 Debug.LogError($"[{target.GetType().Name}]DisabledColorに指定されている{disabledParam.selectPropertyName.stringValue}は定義されていません : {target.name}");
@@ -80,38 +103,9 @@ namespace KrColorPalette
             EditorGUILayout.PropertyField(targetSelectable);
             base.OnInspectorGUI();
 
-            highlightedParam.selectIndex = EditorGUILayout.Popup("HighlightedColor", highlightedParam.selectIndex, propertyNames);
-
-            if(highlightedParam.selectIndex >= 0)
-            {
-                if(propertyNames[highlightedParam.selectIndex] != highlightedParam.selectPropertyName.stringValue)
-                {
-                    highlightedParam.selectPropertyName.stringValue = propertyNames[highlightedParam.selectIndex];
-                    highlightedParam.color.colorValue = (Color)properties[highlightedParam.selectIndex].GetValue(null);
-                }
-            }
-
-            pressedParam.selectIndex = EditorGUILayout.Popup("PressedColor", pressedParam.selectIndex, propertyNames);
-
-            if(pressedParam.selectIndex >= 0)
-            {
-                if(propertyNames[pressedParam.selectIndex] != pressedParam.selectPropertyName.stringValue)
-                {
-                    pressedParam.selectPropertyName.stringValue = propertyNames[pressedParam.selectIndex];
-                    pressedParam.color.colorValue = (Color)properties[pressedParam.selectIndex].GetValue(null);
-                }
-            }
-
-            disabledParam.selectIndex = EditorGUILayout.Popup("DisabledColor", disabledParam.selectIndex, propertyNames);
-
-            if(disabledParam.selectIndex >= 0)
-            {
-                if(propertyNames[disabledParam.selectIndex] != disabledParam.selectPropertyName.stringValue)
-                {
-                    disabledParam.selectPropertyName.stringValue = propertyNames[disabledParam.selectIndex];
-                    disabledParam.color.colorValue = (Color)properties[disabledParam.selectIndex].GetValue(null);
-                }
-            }
+            highlightedParam.DrawPopup("HighlightedColor", properties, propertyNames);
+            pressedParam.DrawPopup("PressedColor", properties, propertyNames);
+            disabledParam.DrawPopup("DisabledColor", properties, propertyNames);
 
             if(EditorGUI.EndChangeCheck())
             {
