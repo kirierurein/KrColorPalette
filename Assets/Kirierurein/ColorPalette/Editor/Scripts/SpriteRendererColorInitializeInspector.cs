@@ -7,18 +7,18 @@ namespace KrColorPalette
     [CanEditMultipleObjects]
     public class SpriteRendererColorInitializeInspector : ColorInitializeInspectorBase
     {
-        private SerializedProperty  targetGraphic       = null;
+        private SerializedProperty  targetSprite        = null;
 
         protected override void OnEnable()
         {
-            targetGraphic = serializedObject.FindProperty("target");
+            targetSprite = serializedObject.FindProperty("target");
             base.OnEnable();
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            EditorGUILayout.PropertyField(targetGraphic);
+            EditorGUILayout.PropertyField(targetSprite);
             base.OnInspectorGUI();
             serializedObject.ApplyModifiedProperties();
         }
@@ -28,9 +28,9 @@ namespace KrColorPalette
         /// </summary>
         protected override void UpdateColor(Color color)
         {
-            if(targetGraphic.objectReferenceValue != null)
+            if(targetSprite.objectReferenceValue != null)
             {
-                SpriteRenderer graphic = (SpriteRenderer)targetGraphic.objectReferenceValue;
+                SpriteRenderer graphic = (SpriteRenderer)targetSprite.objectReferenceValue;
                 graphic.color = color;
             }
         }
